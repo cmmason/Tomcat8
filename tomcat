@@ -1,0 +1,29 @@
+#!/bin/sh
+ 
+# Created by: Christopher Mason - Atos Product Engineering
+# Purpose: Start or stop the Tomcat service.
+ 
+# Check the path of Tomcat and set enviorment variables as follows in the .bashrc profile
+export CATALINA_HOME=/local/apps/tomcat
+export CATALINA_BASE=/local/apps/tomcat
+export JAVA_HOME=/local/apps/tomcat/java
+export TOMCAT_USER=tomcat
+export PATH=$JAVA_HOME/bin:$PATH
+ 
+case $1 in
+start)
+cd /local/apps/tomcat/bin/
+./startup.sh
+;;
+stop)
+cd /local/apps/tomcat/bin/
+./shutdown.sh
+;;
+restart)
+cd /local/apps/tomcat/bin/
+./shutdown.sh
+cd /local/apps/tomcat/bin/
+./startup.sh
+;;
+esac
+exit 0
