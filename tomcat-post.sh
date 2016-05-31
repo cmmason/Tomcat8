@@ -1,4 +1,3 @@
-
 #!/bin/sh
  
 # Created by: Christopher Mason - Product Engineering
@@ -6,8 +5,7 @@
 
 #Create tomcat user and group
 groupadd tomcat
-useradd -s /sbin/nologin -g tomcat -d /local/apps/tomcat tomcat
-passwd tomcat
+useradd -p saxGNITbDEZpo -g tomcat tomcat
 
 #remove unneeded directories
 rm -R /local/apps/tomcat/webapps/docs
@@ -15,8 +13,8 @@ rm -R /local/apps/tomcat/webapps/examples
 rm -R /local/apps/tomcat/webapps/host-manager
 rm -R /local/apps/tomcat/webapps/ROOT
 
-#change ownership for tomcat directory
-chown -R tomcat:tomcat /local/apps/tomcat
+#remove bat files
+rm /local/apps/tomcat/bin/*.bat
 
 #make webapps directory writeable
 chmod 775 /local/apps/tomcat/webapps
@@ -27,9 +25,20 @@ mv /local/apps/tomcat/conf/server.xml /local/apps/tomcat/conf/server_orig.xml
 #copy PLCM server.xml into conf directory
 cp /local/apps/tomcat/post/server.xml /local/apps/tomcat/conf
 
-#copy tomcat script to init.d
-cp /local/apps/tomcat/post/tomcat /etc/init.d
+#backup tomcat-users.xml
+mv /local/apps/tomcat/conf/tomcat-users.xml /local/apps/tomcat/conf/tomcat-users_orig.xml
 
-#start tomcat
-su tomcat -c /etc/init.d/tomcat start
+#copy PLCM tomcat-users.xml into conf directory
+cp /local/apps/tomcat/post/tomcat-users.xml /local/apps/tomcat/conf
 
+#change ownership for tomcat directory
+chown -R tomcat:tomcat /local/apps/tomcat
+
+#add tomcat environment variables to .bashrc
+echo 'export CATALINA_BASE=/local/apps/tomcat' >> /home/tomcat/.bashrc
+echo 'export JAVA_HOME=/local/apps/tomcat/java' >> /home/tomcat/.bashrc
+echo 'export TOMCAT_USER=tomcat' >> /home/tomcat/.bashrc
+echo 'export PATH=$JAVA_HOME/bin:$PATH' >> /home/tomcat/.bashrc
+
+#start tomcat as tomcat user
+su - tomcat -c /local/apps/tomcat/bin/startup.sh

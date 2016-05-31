@@ -1,3 +1,5 @@
+%define __jar_repack 0
+
 Summary:    Apache Servlet/JSP Engine, RI for Servlet 3.1/JSP 2.3 API
 Name:       apache-tomcat
 Version:    8.0.32
@@ -7,8 +9,9 @@ License:    Apache Software License
 #Group:     Application/Tomcat	
 URL:        http://tomcat.apache.org/
 Source0:    apache-tomcat-8.0.32.tar.gz
-Source1:    tomcat
-Source2:    tomcat-post.sh
+Source1:    tomcat-post.sh
+Source2:    server.xml
+Source3:    tomcat-users.xml
 Prefix:     /local/apps/tomcat
 
 %description
@@ -36,8 +39,9 @@ on JPP packages.
 mkdir -p $RPM_BUILD_ROOT/local/apps/tomcat
 cp -R * $RPM_BUILD_ROOT/local/apps/tomcat
 mkdir -p $RPM_BUILD_ROOT/local/apps/tomcat/post
-cp $RPM_SOURCE_DIR/tomcat $RPM_BUILD_ROOT/local/apps/tomcat/post
 cp $RPM_SOURCE_DIR/tomcat-post.sh $RPM_BUILD_ROOT/local/apps/tomcat/post
+cp $RPM_SOURCE_DIR/server.xml $RPM_BUILD_ROOT/local/apps/tomcat/post
+cp $RPM_SOURCE_DIR/tomcat-users.xml $RPM_BUILD_ROOT/local/apps/tomcat/post
 
 %files
 /local/apps/tomcat/
